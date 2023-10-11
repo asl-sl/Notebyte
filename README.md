@@ -1,6 +1,6 @@
 # Applications creator
 
-![logo](img/logo512.png "NoteByte")
+![logo](img/logo256.png "NoteByte")
 
 
 # **Here a python simple task/todo notation application.**
