@@ -1,0 +1,193 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+from dStorage.core import dStorage
+from tkinter import Tk, Button, Label, Listbox, PhotoImage
+import os, tkinter as tk
+import configparser
+
+class creator():
+    def __init__(self):
+            self.info = "pyCreator"
+            self.desc = "aplicativo para construção de softwares. Este aplicativo utiliza a metaclasse dStorage para construção de interfaces, CLI, GUI e ambiente de dados."
+            self.itype = 0
+            self.debug = 0
+            self.db = ""
+            self.tb = ""
+            self.top = Tk
+            self.imgpath = "img/"
+            self.Lb1 = Listbox
+            self.Lbl1 = Label
+            self.ico = tk.PhotoImage
+            config = configparser.ConfigParser()
+            config.read('app-config')
+            self.db = config.get('Aplicativo', 'DB')
+            self.tb = config.get('Aplicativo', 'TB')
+            self.info = config.get('Aplicativo', 'Name')
+            self.desc = config.get('Aplicativo', 'Desc')
+            print("base de dados: ", self.db)
+            print("tabela:", self.tb)
+                 
+    def cadastro(self):
+        c = dStorage([], [])
+        c.dpath = os.path.expanduser("~/")
+        c.table = self.tb
+        c.set_database(self.db)
+        c.debug = 0
+        c.l_pdindex()
+        if self.debug == 1:
+            print(c.pindex)
+            
+        print("testando registro de dados no novo aplicativo...")
+        if self.debug == 1:
+            print("tipo de interface", self.itype)
+            
+        if self.itype == 1:
+            c.cad()
+
+        else:
+            c.registrar()
+            c.show()
+            t = input("salvar registro? (s/n) ")
+            if t == "s":
+                c.savedata()
+
+        print("dados armazenados...")
+
+
+    def visualize(self):
+        c = dStorage([], [])
+        c.table = self.tb
+        print ("visualize:", self.tb, self.db)
+        c.dpath = os.path.expanduser("~/")
+        c.set_database(self.db)
+        c.l_pdindex()
+        c.loaddata(self.Lb1.get(self.Lb1.curselection()))
+        c.display()
+        
+    def consulta(self):
+        if self.itype == 1:
+            self.ico = tk.PhotoImage(self.imgpath + "logo256.png")
+
+        c = dStorage([], [])
+        c.debug = 0
+        c.dpath = os.path.expanduser("~/")
+        print ("consulta:", c.dpath)
+        c.table = self.tb
+        print ("consulta:", self.tb, self.db)
+        c.set_database(self.db)
+        c.l_pdindex()
+        if self.debug == 1:
+            print("testando consulta de dados no novo aplicativo...")
+            
+        if self.itype == 0:
+            print("registros disponíveis")
+            print(c.litems())
+            r = input("registro a ser visualizado? ")
+            c.loaddata(r)
+            c.show()
+
+        else:
+            self.top = Tk()
+            self.top.geometry('320x400')
+            self.top.title("Aplicativo " + self.info)
+            self.Lbl1 = Label(self.top, text=(self.info + " registros."))
+            self.Lb1 = Listbox(self.top)
+            self.Btn1 = Button(self.top, text="visualizar", command=self.visualize)
+            self.Btn2 = Button(self.top, text="remover", command=self.delete)
+            '''c.display()'''
+            for i in c.litems():
+                c.loaddata(i[0])
+                self.Lb1.insert(i[0], i[0])
+            self.Lbl1.pack()
+            self.Lb1.pack()
+            self.Btn1.pack()
+            self.Btn2.pack()
+            self.top.mainloop()
+
+    def delete(self):
+        c = dStorage([], [])
+        c.dpath = os.path.expanduser("~/")
+        c.table = self.tb
+        c.set_database(self.db)
+        if self.debug == 1:
+            c.dbinfo()
+        c.l_pdindex()
+        if self.itype == 0:
+            print("registros disponíveis")
+            print(c.litems())
+            r = input("registro a ser removido?")
+            c.deletedata(r)
+
+        else:
+            c.deletedata(self.Lb1.get(self.Lb1.curselection()))
+
+        print("registro removido")
+            
+    def start(self):
+        print("tipo de interface: ", self.itype)
+        print("Este é: ", self.info)
+        print("Bem vindo ao menu inicial!")
+        print("1 - registrar, 2 - consultar, 3 - remover")
+        e = input()
+        print(e)
+        if e == "1":
+            print("cadastrar...")
+            self.cadastro()
+
+        if e == "2":
+            print("consultar...")
+            self.consulta()
+            
+        else:
+            self.delete()
+
+        exit("espero ter ajudado!")
+
+    def appgui(self):
+        self.top = Tk()
+        self.ico = tk.PhotoImage(self.imgpath + "logo256.png")
+        self.top.geometry('380x420')
+        self.top.title(("Aplicativo " + self.info))
+        self.Lb1 = Listbox(self.top)
+        self.Btn1 = Button(self.top, text="cadastrar", command=self.cadastro)
+        self.Btn2 = Button(self.top, text="consultar", command=self.consulta)
+        self.Btn1.pack()
+        self.Btn2.pack()
+        self.top.iconphoto(False, self.ico)
+        self.top.tk.call('wm', 'iconphoto', self.top._w, tk.PhotoImage(file=self.imgpath + 'logo256.png'))
+        self.top.mainloop()        
+
+
+def main():
+    viface = 1
+    itype = 1
+    config = configparser.ConfigParser()
+    config.read('app-config')
+    db = config.get('Aplicativo', 'DB')
+    tb = config.get('Aplicativo', 'TB')
+    info = config.get('Aplicativo', 'Name')
+    desc = config.get('Aplicativo', 'Desc')
+    print("aplicativo :" + info)
+    print("descrição :" + desc)
+    print("base de dados: ", db)
+    print("tabela:", tb)
+    if viface == 1:
+        term = os.ttyname(0)
+        print("terminal: ",term[5:8])
+        if term[5:8] == "pts":
+            itype = 1
+
+        else:
+            itype = 0
+        
+    print("tipo de interface:", itype)
+    c = creator()
+    c.info = info
+    c.sdb = db
+    c.itype = itype
+    if itype == 1:
+        c.appgui()
+    else:
+        c.start()
+        
+main()
