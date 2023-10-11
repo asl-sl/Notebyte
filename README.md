@@ -1,4 +1,4 @@
-# Applications creator
+# Notebyte, simple anotetions/tasks application.
 
 ![logo](img/logo256.png "NoteByte")
 
