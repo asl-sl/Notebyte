@@ -73,8 +73,8 @@ _contact_**/contato:**
 
 **email:** [Mônica](monijucodoro@gmail.com) 
 
-[Academia do software livre **Brasil - MG**](www.asl-sl.com.br)
+[Academia do software livre **Brasil - MG**](https://asl-sl.com.br)
 
-[Courses and studies**](www.cursos.asl-sl.com.br)
+[Courses and studies**](https://cursos.asl-sl.com.br)
 
 [contact](mailto:feraleomg@gmail.com)
