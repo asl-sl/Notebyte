@@ -29,9 +29,12 @@ class creator():
                  
     def cadastro(self):
         c = dStorage([], [])
-        c.dpath = os.path.expanduser("~/")
         c.table = self.tb
-        c.set_database(self.db)
+        print ("visualize:", self.tb, self.db)
+        database = self.db
+        c.dpath = os.getcwd() + "/"
+        c.set_database(database)
+        c.dbinfo()
         c.debug = 0
         c.l_pdindex()
         if self.debug == 1:
@@ -58,8 +61,10 @@ class creator():
         c = dStorage([], [])
         c.table = self.tb
         print ("visualize:", self.tb, self.db)
-        c.dpath = os.path.expanduser("~/")
-        c.set_database(self.db)
+        database = self.db
+        c.dpath = os.getcwd() + "/"
+        c.set_database(database)
+        c.dbinfo()
         c.l_pdindex()
         c.loaddata(self.Lb1.get(self.Lb1.curselection()))
         c.display()
@@ -68,13 +73,14 @@ class creator():
         if self.itype == 1:
             self.ico = tk.PhotoImage(self.imgpath + "logo256.png")
 
+        '''        c.debug = 0 '''
         c = dStorage([], [])
-        c.debug = 0
-        c.dpath = os.path.expanduser("~/")
-        print ("consulta:", c.dpath)
         c.table = self.tb
-        print ("consulta:", self.tb, self.db)
-        c.set_database(self.db)
+        print ("visualize:", self.tb, self.db)
+        database = self.db
+        c.dpath = os.getcwd() + "/"
+        c.set_database(database)
+        c.dbinfo()
         c.l_pdindex()
         if self.debug == 1:
             print("testando consulta de dados no novo aplicativo...")
@@ -106,8 +112,10 @@ class creator():
 
     def delete(self):
         c = dStorage([], [])
-        c.dpath = os.path.expanduser("~/")
-        c.table = self.tb
+        print ("visualize:", self.tb, self.db)
+        database = self.db
+        c.dpath = os.getcwd() + "/"
+        c.set_database(database)
         c.set_database(self.db)
         if self.debug == 1:
             c.dbinfo()
@@ -183,7 +191,8 @@ def main():
     print("tipo de interface:", itype)
     c = creator()
     c.info = info
-    c.sdb = db
+    c.db = db
+    c.sdb = c.db
     c.itype = itype
     if itype == 1:
         c.appgui()
