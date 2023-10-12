@@ -112,13 +112,17 @@ class creator():
 
     def delete(self):
         c = dStorage([], [])
+        c.table = self.tb
         print ("visualize:", self.tb, self.db)
         database = self.db
         c.dpath = os.getcwd() + "/"
         c.set_database(database)
-        c.set_database(self.db)
+        c.dbinfo()
+        c.debug = 0
+        c.l_pdindex()
         if self.debug == 1:
-            c.dbinfo()
+            print(c.pindex)
+            
         c.l_pdindex()
         if self.itype == 0:
             print("registros disponíveis")
